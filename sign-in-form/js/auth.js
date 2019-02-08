@@ -1,7 +1,7 @@
 'use strict';
 
-const signInForm = document.querySelector('.sign-in-htm'),
-      signUpForm = document.querySelector('.sign-up-htm');
+const formSignIn = document.querySelector('.sign-in-htm');
+const formSignUp = document.querySelector('.sign-up-htm');
 
 function signIn(event) {
   event.preventDefault();
@@ -16,7 +16,7 @@ function signIn(event) {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+})
     .then(res => {
       if (200 <= res.status && res.status < 300) {
         return res;
@@ -26,8 +26,8 @@ function signIn(event) {
     .then(res => res.json())
     .then(data => {
       if (data.error) {
-        throw new Error(data.message);
-      }
+        throw new Error(data.message)
+      };
       event.target.querySelector('output').value = `Пользователь ${data.name} успешно авторизован`;
     })
     .catch(err => {
@@ -50,7 +50,7 @@ function signUp(event) {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+})
     .then(res => {
       if (200 <= res.status && res.status < 300) {
         return res;
@@ -60,14 +60,14 @@ function signUp(event) {
     .then(res => res.json())
     .then(data => {
       if (data.error) {
-        throw new Error(data.message);
-      }
+        throw new Error(data.message)
+      };
       event.target.querySelector('output').value = `Пользователь ${data.name} успешно зарегистрирован`;
     })
-    .catch(error => {
-      event.target.querySelector('output').value = error;
+    .catch(err => {
+      event.target.querySelector('output').value = err;
     });
 }
 
-signInForm.addEventListener('submit', signIn);
-signUpForm.addEventListener('submit', signUp);
+formSignIn.addEventListener('submit', signIn);
+formSignUp.addEventListener('submit', signUp);
