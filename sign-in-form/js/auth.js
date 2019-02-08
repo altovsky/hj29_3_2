@@ -16,7 +16,7 @@ function signIn(event) {
     headers: {
       'Content-Type': 'application/json'
     }
-})
+  })
     .then(res => {
       if (200 <= res.status && res.status < 300) {
         return res;
@@ -50,7 +50,7 @@ function signUp(event) {
     headers: {
       'Content-Type': 'application/json'
     }
-})
+  })
     .then(res => {
       if (200 <= res.status && res.status < 300) {
         return res;
