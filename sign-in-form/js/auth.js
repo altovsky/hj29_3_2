@@ -1,7 +1,7 @@
 'use strict';
 
 const signInForm = document.querySelector('.sign-in-htm'),
-  signUpForm = document.querySelector('.sign-up-htm');
+      signUpForm = document.querySelector('.sign-up-htm');
 
 function signIn(event) {
   event.preventDefault();
@@ -25,9 +25,9 @@ function signIn(event) {
     })
     .then(res => res.json())
     .then(data => {
-      // if (data.error) {
-      //   throw new Error(data.message);
-      // }
+      if (data.error) {
+        throw new Error(data.message);
+      }
       event.target.querySelector('output').value = `Пользователь ${data.name} успешно авторизован`;
     })
     .catch(err => {
@@ -59,9 +59,9 @@ function signUp(event) {
     })
     .then(res => res.json())
     .then(data => {
-      // if (data.error) {
-      //   throw new Error(data.message);
-      // }
+      if (data.error) {
+        throw new Error(data.message);
+      }
       event.target.querySelector('output').value = `Пользователь ${data.name} успешно зарегистрирован`;
     })
     .catch(error => {
