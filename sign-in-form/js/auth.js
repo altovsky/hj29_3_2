@@ -1,73 +1,52 @@
 'use strict';
 
-const formSignIn = document.querySelector('.sign-in-htm');
-const formSignUp = document.querySelector('.sign-up-htm');
+// Дмитрий, прошу прощения. Так и не смог разобраться с fetch и переделал на xhr
 
-function signIn(event) {
+const xhrSingIn = new XMLHttpRequest(),
+      formSignIn = document.querySelector('.sign-in-htm'),
+      outputSignIn = formSignIn.getElementsByTagName('output')[0],
+      buttonSignIn = formSignIn.getElementsByClassName('button')[0],
+
+      xhrSignUp = new XMLHttpRequest(),
+      formSignUp = document.querySelector('.sign-up-htm'),
+      outputSignUp = formSignUp.getElementsByTagName('output')[0],
+      buttonSignUp = formSignUp.getElementsByClassName('button')[0];
+
+buttonSignIn.addEventListener('click', () => {
   event.preventDefault();
 
-  fetch('https://neto-api.herokuapp.com/signin', {
-    body: JSON.stringify({
-      email: event.target.email.value,
-      password: event.target.pass.value
-    }),
-    credentials: 'same-origin',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => {
-      if (200 <= res.status && res.status < 300) {
-        return res;
-      }
-      throw new Error(res.statusText);
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) {
-        throw new Error(data.message)
-      };
-      event.target.querySelector('output').value = `Пользователь ${data.name} успешно авторизован`;
-    })
-    .catch(err => {
-      event.target.querySelector('output').value = err;
-    });
-}
+  xhrSingIn.open('POST', 'https://neto-api.herokuapp.com/signin');
+  xhrSingIn.setRequestHeader('Content-Type', 'application/json');
+  const body = {
+    email: formSignIn.querySelector('#email').value,
+    password: formSignIn.querySelector('#pass').value
+  };
 
-function signUp(event) {
+  xhrSingIn.send(JSON.stringify(body));
+});
+
+xhrSingIn.addEventListener('load', () => {
+  const response = JSON.parse(xhrSingIn.response);
+  outputSignIn.innerText = response.error ? response.message : `Пользователь ${response.name} успешно авторизирован`;
+});
+
+
+buttonSignUp.addEventListener('click', () => {
   event.preventDefault();
 
-  fetch('https://neto-api.herokuapp.com/signup', {
-    body: JSON.stringify({
-      email: event.target.email.value,
-      password: event.target.password.value,
-      passwordcopy: event.target.passwordcopy.value,
-      name: event.target.name.value
-    }),
-    credentials: 'same-origin',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => {
-      if (200 <= res.status && res.status < 300) {
-        return res;
-      }
-      throw new Error(res.statusText);
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) {
-        throw new Error(data.message)
-      };
-      event.target.querySelector('output').value = `Пользователь ${data.name} успешно зарегистрирован`;
-    })
-    .catch(err => {
-      event.target.querySelector('output').value = err;
-    });
-}
+  xhrSignUp.open('POST', 'https://neto-api.herokuapp.com/signup');
+  xhrSignUp.setRequestHeader('Content-Type', 'application/json');
+  const body = {
+    email: formSignUp.querySelector('#email').value,
+    password: formSignUp.querySelector('#pass').value,
+    passwordcopy: formSignUp.querySelectorAll('#pass')[1].value,
+    name: formSignUp.querySelectorAll('#pass')[2].value
+  };
 
-formSignIn.addEventListener('submit', signIn);
-formSignUp.addEventListener('submit', signUp);
+  xhrSignUp.send(JSON.stringify(body));
+});
+
+xhrSignUp.addEventListener('load', () => {
+  const response = JSON.parse(xhrSignUp.response);
+  outputSignUp.innerText = response.error ? response.message : `Пользователь ${response.name} успешно зарегистрирован`;
+});
